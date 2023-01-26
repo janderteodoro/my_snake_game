@@ -1,51 +1,38 @@
 import pygame
-import time
 import random
- 
-pygame.init()
+import config
 
-white = (255, 255, 255)
-yellow = (255, 255, 102)
-black = (0, 0, 0)
-red = (213, 50, 80)
-green = (0, 255, 0)
-blue = (27, 45, 118)
+pygame.init()
  
-dis_width = 600
-dis_height = 400
- 
-dis = pygame.display.set_mode((dis_width, dis_height))
+dis = pygame.display.set_mode((config.dis_width, config.dis_height))
 pygame.display.set_caption('Snake Game by Jander')
  
 clock = pygame.time.Clock()
- 
-snake_block = 10
-snake_speed = 15
  
 font_style = pygame.font.SysFont("comicsansms", 25)
 score_font = pygame.font.SysFont("comicsansms", 35)
  
  
 def Your_score(score):
-    value = score_font.render("Your Score: " + str(score), True, yellow)
+    value = score_font.render("Your Score: " + str(score), True, config.colors['yellow'])
     dis.blit(value, [0, 0])
  
 def our_snake(snake_block, snake_list):
     for x in snake_list:
-        pygame.draw.rect(dis, black, [x[0], x[1], snake_block, snake_block])
+        pygame.draw.rect(dis, config.colors['black'], [x[0], x[1], snake_block, snake_block])
 
  
 def message(msg, color):
     mesg = font_style.render(msg, True, color)
-    dis.blit(mesg, [dis_width / 6, dis_height / 3])
+    dis.blit(mesg, [config.dis_width / 6, config.dis_height / 3])
  
  
 def game_loop():
     game_over = False
     game_close = False
  
-    x1 = dis_width / 2
-    y1 = dis_height / 2
+    x1 = config.dis_width / 2
+    y1 = config.dis_height / 2
  
     x1_change = 0
     y1_change = 0
@@ -53,17 +40,17 @@ def game_loop():
     snake_List = []
     Length_of_snake = 1
  
-    foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
-    foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
+    foodx = round(random.randrange(0, config.dis_width - config.snake_block) / 10.0) * 10.0
+    foody = round(random.randrange(0, config.dis_height - config.snake_block) / 10.0) * 10.0
  
     while not game_over:
  
         while game_close == True:
-            dis.fill(blue)
-            game_over_msg = font_style.render('Game Over', True, red)
-            press_msg = font_style.render('Pressione:', True, white)
-            quit_message = font_style.render('Q para sair', True, white)
-            restart_message = font_style.render('C Para jogar novamente', True, white)
+            dis.fill(config.colors['blue'])
+            game_over_msg = font_style.render('Game Over', True, config.colors['red'])
+            press_msg = font_style.render('Pressione:', True, config.colors['white'])
+            quit_message = font_style.render('Q para sair', True, config.colors['white'])
+            restart_message = font_style.render('C Para jogar novamente', True, config.colors['white'])
             dis.blit(game_over_msg, [280, 160])
             dis.blit(press_msg, [280, 180])
             dis.blit(quit_message, [280, 200])
@@ -84,24 +71,24 @@ def game_loop():
                 game_over = True
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
-                    x1_change = -snake_block
+                    x1_change = -config.snake_block
                     y1_change = 0
                 elif event.key == pygame.K_RIGHT:
-                    x1_change = snake_block
+                    x1_change = config.snake_block
                     y1_change = 0
                 elif event.key == pygame.K_UP:
-                    y1_change = -snake_block
+                    y1_change = -config.snake_block
                     x1_change = 0
                 elif event.key == pygame.K_DOWN:
-                    y1_change = snake_block
+                    y1_change = config.snake_block
                     x1_change = 0
  
-        if x1 >= dis_width or x1 < 0 or y1 >= dis_height or y1 < 0:
+        if x1 >= config.dis_width or x1 < 0 or y1 >= config.dis_height or y1 < 0:
             game_close = True
         x1 += x1_change
         y1 += y1_change
-        dis.fill(blue)
-        pygame.draw.rect(dis, green, [foodx, foody, snake_block, snake_block])
+        dis.fill(config.colors['blue'])
+        pygame.draw.rect(dis, config.colors['green'], [foodx, foody, config.snake_block, config.snake_block])
         snake_Head = []
         snake_Head.append(x1)
         snake_Head.append(y1)
@@ -113,17 +100,17 @@ def game_loop():
             if x == snake_Head:
                 game_close = True
  
-        our_snake(snake_block, snake_List)
+        our_snake(config.snake_block, snake_List)
         Your_score(Length_of_snake - 1)
  
         pygame.display.update()
  
         if x1 == foodx and y1 == foody:
-            foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
-            foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
+            foodx = round(random.randrange(0, config.dis_width - config.snake_block) / 10.0) * 10.0
+            foody = round(random.randrange(0, config.dis_height - config.snake_block) / 10.0) * 10.0
             Length_of_snake += 1
  
-        clock.tick(snake_speed)
+        clock.tick(config.snake_speed)
  
     pygame.quit()
     quit()
